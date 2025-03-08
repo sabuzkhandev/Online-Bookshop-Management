@@ -89,12 +89,13 @@
       async function getAuthors() {
         let URL = 'https://bs-api.sobuj.net/view/authors/readAuthors.php'
         let tableData = document.getElementById('authorList')
-        tableData.innerHTML = "<tr><td colspan='4'>Loading...</td></tr>"
 
         try {
+          tableData.innerHTML = "<tr><td colspan='4'>Loading...</td></tr>"
           let response = await axios.get(URL)
           let authors = response.data
           tableData.innerHTML = ''
+
           if (!authors.length) {
             tableData.innerHTML =
               "<tr><td colspan='4'>No Author Found</td></tr>"
@@ -122,6 +123,7 @@
         let URL = 'https://bs-api.sobuj.net/view/authors/insertAuthor.php'
         let name = document.getElementById('nameID').value.trim()
         let email = document.getElementById('emailID').value.trim()
+
         if (!name || !email) {
           alert('All fields are required')
           return
@@ -141,6 +143,19 @@
           }
         } catch (error) {
           console.error('Error adding author:', error)
+        }
+      }
+
+      async function deleteAuthor(authorId) {
+        let URL = `https://bs-api.sobuj.net/view/authors/deleteAuthor.php?id=${authorId}`
+        try {
+          let response = await axios.delete(URL)
+          if (response.status === 200) {
+            alert('Author deleted successfully')
+            getAuthors()
+          }
+        } catch (error) {
+          console.error('Error deleting author:', error)
         }
       }
     </script>
